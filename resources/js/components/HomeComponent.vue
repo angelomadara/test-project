@@ -12,10 +12,9 @@
                 </b-form-group>
             </div>
             <div class="col-6">
-
-            </div>
-            <div class="col-6">
-                <template-component></template-component>
+                <div class="col-12" v-for="data in parsed_csv" :key="data.id">
+                    <template-component :csv_data="data"></template-component>
+                </div>
             </div>
         </div>
     </div>
@@ -27,8 +26,8 @@ export default {
   data() {
     return {
       file: null,
-      parse_csv: [],
-      parse_header: [],
+      parsed_csv: [],
+      parsed_header: [],
       sortOrders: {},
     }
   },
@@ -40,7 +39,7 @@ export default {
         reader.readAsText(this.file)
         reader.onload = function(event) {
           let csv = event.target.result;
-          vm.parse_csv = vm.csvJSON(csv)
+          vm.parsed_csv = vm.csvJSON(csv)
         };
         reader.onerror = function(evt) {
           if(evt.target.error.name == "NotReadableError") {
@@ -54,7 +53,7 @@ export default {
       let lines = csv.split("\n")
       let result = []
       let headers = lines[0].split(",")
-      vm.parse_header = lines[0].split(",")
+      vm.parsed_header = lines[0].split(",")
       lines[0].split(",").forEach(function (key) {
         vm.sortOrders[key] = 1
       })
